@@ -4,9 +4,13 @@ import loader from 'dotenv';
 import root from 'app-root-path';
 import filter from 'filter-object';
 import autobind from 'autobind-decorator';
-import { console, debug, info, warn } from '@nod/console';
+import { console } from '@nod/console';
 import configurator from 'node-env-configuration';
 import { param, returns, Optional as optional } from 'decorate-this';
+
+let debug = console.debug || () => {},
+    info  = console.info || ()  => {},
+    warn  = console.warn || ()  => {};
 
 const PROTECTED = Symbol('PROTECTED');
 
@@ -112,7 +116,6 @@ export class Environment {
   }
 }
 
-export default Environment;
 export let environment = new Environment();
 export let { ENV, config } = environment;
-console.log({ environment });
+export default Environment;
