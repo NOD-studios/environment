@@ -1,0 +1,14 @@
+{
+  "moduleIds"  : false,
+  "comments"   : false,
+  "compact"    : false,
+  "stage"      : 2,
+  "sourceMaps" : "inline",
+  "sourceRoot" : "./",
+  "optional"   : [
+    "es7.classProperties",
+    "es7.asyncFunctions",
+    "es7.decorators",
+    "runtime"
+  ]
+}
