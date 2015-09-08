@@ -1,6 +1,6 @@
 {
   "name": "@nod/environment",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Creates merged config object after parsing dotenv and current env variables",
   "main": "index.js",
   "dependencies": {
