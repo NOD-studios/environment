@@ -14,7 +14,7 @@ let info = console.log.bind(console),
   debug = info,
   warn = console.error.bind(console);
 
-export default class Environment {
+export class Environment {
 
   defaults = {
     files       : [
@@ -115,3 +115,5 @@ export default class Environment {
     return JSON.stringify(filter(this.config, excludes));
   }
 }
+
+export default Environment;
