@@ -1,18 +1,14 @@
 import 'source-map-support/register';
-import console from 'console';
-import loader from 'dotenv';
 import path from 'path';
+import loader from 'dotenv';
 import root from 'app-root-path';
 import filter from 'filter-object';
 import autobind from 'autobind-decorator';
+import { console, debug, info, warn } from '@nod/console';
 import configurator from 'node-env-configuration';
 import { param, returns, Optional as optional } from 'decorate-this';
 
 const PROTECTED = Symbol('PROTECTED');
-
-let info = console.log.bind(console),
-  debug = info,
-  warn = console.error.bind(console);
 
 export class Environment {
 
@@ -40,7 +36,7 @@ export class Environment {
   constructor(options = {}) {
     this.setOptions(options);
     this.ENV = this.load();
-    this.config = this.configurator(undefined, undefined, this.warn);
+    this.config = this.configurator(undefined, undefined, this.debug);
 
     this.info(`${this.constructor.name}: Initialized.`);
   }
@@ -75,7 +71,7 @@ export class Environment {
       if (status) {
         this.info(`${this.constructor.name}.load: '${file}' loaded.`);
       } else {
-        this.warn(`${this.constructor.name}.load: '${file}' could not loaded`);
+        this.debug(`${this.constructor.name}.load: '${file}' could not found`);
       }
     });
     return process.env;
@@ -117,3 +113,6 @@ export class Environment {
 }
 
 export default Environment;
+export let environment = new Environment();
+export let { ENV, config } = environment;
+console.log({ environment });

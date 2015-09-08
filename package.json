@@ -4,6 +4,7 @@
   "description": "Creates merged config object after parsing dotenv and current env variables",
   "main": "index.js",
   "dependencies": {
+    "@nod/console": "^1.2.2",
     "app-root-path": "^1.0.0",
     "autobind-decorator": "^1.2.0",
     "babel": "^5.6.23",
