@@ -1,15 +1,11 @@
 import 'source-map-support/register';
 import path from 'path';
 import loader from 'dotenv';
-import root from 'app-root-path';
 import filter from 'filter-object';
 import autobind from 'autobind-decorator';
+import { debug, info, warn } from '@nod/console/instance';
 import configurator from 'node-env-configuration';
 import { param, returns, Optional as optional } from 'decorate-this';
-
-let debug = () => {},
-    info  = debug,
-    warn  = debug;
 
 const PROTECTED = Symbol('PROTECTED');
 
@@ -28,8 +24,8 @@ export class Environment {
       ENV    : {},
       config : {}
     },
+    root : path.dirname(require.main.filename),
     configurator,
-    root,
     loader,
     debug,
     info,

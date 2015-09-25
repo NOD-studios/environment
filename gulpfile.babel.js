@@ -5,22 +5,42 @@ import gulp from 'gulp';
 import assign from 'object.assign';
 import vinylPaths from 'vinyl-paths';
 import runSequence from 'run-sequence';
-import loadPlugins from 'gulp-load-plugins';
 import childProcess from 'child_process';
+import loadPlugins from 'gulp-load-plugins';
+import npmScriptSync from 'gulp-npm-script-sync';
 
 Object.assign = Object.assign || assign;
 
 const $ = loadPlugins();
-const parseDotFile = (fileName) => {
+
+let parseDotFile = (fileName) => {
   return JSON.parse(fs.readFileSync(path.normalize(`./.${fileName}`), {
     encoding : 'UTF-8'
   }));
 };
 
+let exec = (command = '') => {
+  return new Promise((resolve, reject) => {
+    childProcess.exec(command, (error, stdout, stderror) => {
+      if (stdout) {
+        process.stdout.write(stdout);
+      }
+      if (stderror) {
+        process.stderr.write(stderror);
+      }
+      if (error !== null) {
+        reject(error);
+      }
+      resolve();
+    })
+  });
+}
+
 const options = {
   eslint : parseDotFile('eslintrc'),
   babel  : parseDotFile('babelrc')
 };
+
 const paths = {
   dist : path.normalize('./dist/'),
   src : path.normalize('./src/'),
@@ -56,11 +76,11 @@ gulp.task('build-commonjs', () => {
   let dest = path.join(paths.dist, 'commonjs');
   return gulp.src(paths.js)
     .pipe($.changed(dest))
-    .pipe($.sourcemaps.init())
+    // .pipe($.sourcemaps.init())
     .pipe($.babel(Object.assign({}, options.babel, {
       modules : 'common'
     })))
-    .pipe($.sourcemaps.write())
+    // .pipe($.sourcemaps.write())
     .pipe(gulp.dest(dest));
 });
 
@@ -68,11 +88,11 @@ gulp.task('build-amd', () => {
   let dest = path.join(paths.dist, 'amd');
   return gulp.src(paths.js)
     .pipe($.changed(dest))
-    .pipe($.sourcemaps.init())
+    // .pipe($.sourcemaps.init())
     .pipe($.babel(Object.assign({}, options.babel, {
       modules : 'amd'
     })))
-    .pipe($.sourcemaps.write())
+    // .pipe($.sourcemaps.write())
     .pipe(gulp.dest(dest));
 });
 
@@ -80,28 +100,47 @@ gulp.task('build-system', () => {
   let dest = path.join(paths.dist, 'system');
   return gulp.src(paths.js)
     .pipe($.changed(dest))
-    .pipe($.sourcemaps.init())
+    // .pipe($.sourcemaps.init())
     .pipe($.babel(Object.assign({}, options.babel, {
       modules : 'system'
     })))
-    .pipe($.sourcemaps.write())
+    // .pipe($.sourcemaps.write())
     .pipe(gulp.dest(dest));
 });
 
+gulp.task('run-instance', () => {
+  let invoked = false;
+  let process = childProcess.fork(path.join(__dirname, 'instance.js'));
 
-gulp.task('run-index', () => {
-  childProcess.exec('npm run main', function(error, stdout, stderr) {
-    console.log(stdout);
-    if (error !== null) {
-      console.error(`exec error: ${error}`);
-    }
+  return new Promise((resolve, reject) => {
+
+    process.on('error', (error) => {
+        if (invoked) {
+          return false;
+        }
+        invoked = true;
+        reject(error);
+    });
+
+    process.on('exit', (code) => {
+        if (invoked) {
+          return false;
+        }
+        invoked = true;
+        let error = code === 0 ? null : new Error(`exit code ${code}`);
+        if (error) {
+          reject(error);
+        }
+        resolve();
+    });
+
   });
 });
 
 gulp.task('build', ['lint'], (callback) => {
   runSequence(
     ['build-es7', 'build-commonjs', 'build-amd', 'build-system'],
-    'run-index',
+    'run-instance',
     callback
   );
 });
@@ -117,6 +156,22 @@ gulp.task('watch', () => {
     }));
 });
 
+gulp.task('preversion', ['build'], () => {
+  return exec('git add -A');
+});
+
+gulp.task('postversion', ['postpublish']);
+
+gulp.task('prepublish', () => {
+  return exec('npm run build && git add -A');
+});
+
+gulp.task('postpublish', () => {
+  return exec('git push && git push --tags');
+});
+
+gulp.task('test', ['run-instance']);
+
 gulp.task('default', ['lint'], (callback) => {
   return runSequence(
     'clean',
@@ -125,3 +180,5 @@ gulp.task('default', ['lint'], (callback) => {
     callback
   );
 });
+
+$.npmScriptSync(gulp);

@@ -4,12 +4,16 @@
   "description": "Creates merged config object after parsing dotenv and current env variables",
   "main": "index.js",
   "dependencies": {
+    "@nod/console": "^4.0.5",
     "app-root-path": "^1.0.0",
     "autobind-decorator": "^1.2.0",
     "debug": "^2.2.0",
     "decorate-this": "^0.5.0",
     "dotenv": "^1.2.0",
     "filter-object": "^1.1.2",
+    "from": "^0.1.3",
+    "fs": "0.0.2",
+    "import": "0.0.6",
     "lie-fs": "^1.1.0",
     "node-env-configuration": "^0.0.6"
   },
@@ -25,24 +29,13 @@
     "gulp-debug": "^2.1.0",
     "gulp-eslint": "^1.0.0",
     "gulp-load-plugins": "^0.10.0",
+    "gulp-npm-script-sync": "^1.0.2",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-watch": "^4.3.5",
     "object.assign": "^4.0.1",
     "run-sequence": "^1.1.2",
     "source-map-support": "^0.3.2",
     "vinyl-paths": "^2.0.0"
-  },
-  "scripts": {
-    "main": "node index.js",
-    "lint": "gulp lint",
-    "clean": "gulp clean",
-    "build": "gulp build",
-    "watch": "gulp watch",
-    "version": "npm run build && git add -A",
-    "postversion": "npm publish",
-    "prepublish": "npm run build && git add -A",
-    "postpublish": "git push && git push --tags",
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -71,5 +64,25 @@
   "bugs": {
     "url": "https://github.com/nod-studios/environment/issues"
   },
-  "homepage": "https://github.com/nod-studios/environment#readme"
+  "homepage": "https://github.com/nod-studios/environment#readme",
+  "engines": {
+    "npm": ">=1.5.0"
+  },
+  "scripts": {
+    "clean": "gulp clean",
+    "lint": "gulp lint",
+    "build-es7": "gulp build-es7",
+    "build-commonjs": "gulp build-commonjs",
+    "build-amd": "gulp build-amd",
+    "build-system": "gulp build-system",
+    "run-instance": "gulp run-instance",
+    "build": "gulp build",
+    "watch": "gulp watch",
+    "preversion": "gulp preversion",
+    "postversion": "gulp postversion",
+    "prepublish": "gulp prepublish",
+    "postpublish": "gulp postpublish",
+    "test": "gulp test",
+    "default": "gulp default"
+  }
 }
