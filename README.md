@@ -5,9 +5,11 @@ Creates merged config object after parsing dotenv and current env variables thro
 Supports ES5, ES7, AMD, CommonJS, System and ES6 modules.
 Works in node.js also should(?) work in browser.
 
-[![Join the chat][gitter-image]][gitter-url]
 [![GitHub tag][tag-image]][tag-url]
+[![Build status][build-image]][build-url]
 [![Dependency Status][david-image]][david-url]
+[![Join the chat][gitter-image]][gitter-url]
+
 
 # Usage:
 
@@ -17,6 +19,10 @@ npm install --save @nod/environment
 ```
 
 ## Examples:
+```javascript
+import { environment } from '@nod/environment/instance';
+console.log(environment.config);
+```
 
 ```javascript
 import { Environment } from '@nod/environment';
@@ -88,3 +94,5 @@ by [NOD studios](http://nod.st)
 [mail-url]: mailto:hey@nod.st
 [tag-image]: https://img.shields.io/github/tag/NOD-studios/environment.svg
 [tag-url]: https://github.com/NOD-studios/environment/tags
+[build-image]: https://travis-ci.org/NOD-studios/environment.svg
+[build-url]: https://travis-ci.org/NOD-studios/environment
