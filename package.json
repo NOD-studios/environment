@@ -14,7 +14,8 @@
     "fs": "0.0.2",
     "import": "0.0.6",
     "lie-fs": "^1.1.0",
-    "node-env-configuration": "^0.0.6"
+    "node-env-configuration": "^0.0.6",
+    "source-map-support": "^0.3.3"
   },
   "devDependencies": {
     "babel": "^5.8.23",
@@ -33,7 +34,6 @@
     "gulp-watch": "^4.3.5",
     "object.assign": "^4.0.1",
     "run-sequence": "^1.1.2",
-    "source-map-support": "^0.3.2",
     "vinyl-paths": "^2.0.0"
   },
   "repository": {
