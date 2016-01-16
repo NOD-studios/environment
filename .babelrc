@@ -1,14 +1,4 @@
 {
-  "moduleIds"  : false,
-  "comments"   : false,
-  "compact"    : false,
-  "stage"      : 2,
-  "sourceMaps" : "inline",
-  "sourceRoot" : "./",
-  "optional"   : [
-    "es7.classProperties",
-    "es7.asyncFunctions",
-    "es7.decorators",
-    "runtime"
-  ]
+  "presets": ["es2015", "stage-0"],
+  "plugins" : ["babel-plugin-transform-decorators-legacy"]
 }

@@ -4,12 +4,13 @@ import console from 'console';
 import loader from 'dotenv';
 import filter from 'filter-object';
 import autobind from 'autobind-decorator';
+import { Base } from '@nod/base';
 import configurator from 'node-env-configuration';
 import { param, returns, Optional as optional } from 'decorate-this';
 
 const PROTECTED = Symbol('PROTECTED');
 
-export class Environment {
+export class Environment extends Base {
 
   defaults = {
     silent      : true,
@@ -24,11 +25,7 @@ export class Environment {
     root : path.dirname(require.main.filename),
     configurator,
     loader
-  }
-
-  get options() {
-    return this[PROTECTED].options;
-  }
+  };
 
   @autobind
   @param(optional({
@@ -37,11 +34,7 @@ export class Environment {
   }))
   @returns(Object)
   setOptions(options = {}) {
-    return Object.assign(this[PROTECTED].options, this.defaults, options);
-  }
-
-  set options(options = {}) {
-    return this.setOptions(options);
+    return super.setOptions(options);
   }
 
   @param(String)
@@ -101,13 +94,13 @@ export class Environment {
   }
 
   constructor(options = {}) {
-    this[PROTECTED] = this[PROTECTED] || {
-      ENV    : {},
-      config : {},
-      options : {}
-    };
+    super(options);
 
-    this.options = options;
+    Object.assign(this[PROTECTED], {
+      ENV    : {},
+      config : {}
+    });
+
     this.ENV = this.load();
 
     let warn = (this.options.silent !== true) ? console.warn.bind(console) : function() {};
