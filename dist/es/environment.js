@@ -12,21 +12,6 @@ const PROTECTED = Symbol('PROTECTED');
 
 export class Environment extends Base {
 
-  defaults = {
-    silent      : true,
-    files       : [
-      '.env.local',
-      '.env.production',
-      '.env.test',
-      '.env.development',
-      '.env',
-      '.env.nod'
-    ],
-    root : path.dirname(require.main.filename),
-    configurator,
-    loader
-  };
-
   @autobind
   @param(optional({
     root        : optional(String),
@@ -94,7 +79,22 @@ export class Environment extends Base {
   }
 
   constructor(options = {}) {
-    super(options);
+    super(options, {
+      silent      : true,
+      files       : [
+        '.env.local',
+        '.env.production',
+        '.env.test',
+        '.env.development',
+        '.env',
+        '.env.nod'
+      ],
+      root : path.dirname(require.main.filename),
+      configurator,
+      loader
+    });
+
+    this[PROTECTED] = this[PROTECTED] || {};
 
     Object.assign(this[PROTECTED], {
       ENV    : {},
