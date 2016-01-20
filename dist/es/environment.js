@@ -1,4 +1,5 @@
 import 'source-map-support/register';
+import "babel-polyfill";
 import path from 'path';
 import console from 'console';
 import loader from 'dotenv';
@@ -14,8 +15,8 @@ export class Environment extends Base {
 
   @autobind
   @param(optional({
-    root        : optional(String),
-    files       : optional(Array)
+    root  : optional(String),
+    files : optional(Array)
   }))
   @returns(Object)
   setOptions(options = {}) {

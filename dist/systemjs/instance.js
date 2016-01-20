@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['./environment'], function (_export, _context) {
+System.register(['source-map-support/register', 'babel-polyfill', './environment'], function (_export, _context) {
   var Environment, environment;
   return {
-    setters: [function (_environment) {
+    setters: [function (_sourceMapSupportRegister) {}, function (_babelPolyfill) {}, function (_environment) {
       Environment = _environment.Environment;
     }],
     execute: function () {
