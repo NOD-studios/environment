@@ -1,56 +1,33 @@
-System.register([], function (_export, _context) {
+'use strict';
+
+System.register(['path'], function (_export, _context) {
+  var path, Configuration;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
   return {
-    setters: [],
+    setters: [function (_path) {
+      path = _path.default;
+    }],
     execute: function () {
-      (function (global, factory) {
-        if (typeof define === "function" && define.amd) {
-          define(['exports', 'path'], factory);
-        } else if (typeof exports !== "undefined") {
-          factory(exports, require('path'));
-        } else {
-          var mod = {
-            exports: {}
-          };
-          factory(mod.exports, global.path);
-          global.configuration = mod.exports;
-        }
-      })(this, function (exports, _path) {
-        'use strict';
+      _export('Configuration', Configuration = function Configuration() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-        Object.defineProperty(exports, "__esModule", {
-          value: true
-        });
-        exports.Configuration = undefined;
+        _classCallCheck(this, Configuration);
 
-        var _path2 = _interopRequireDefault(_path);
-
-        function _interopRequireDefault(obj) {
-          return obj && obj.__esModule ? obj : {
-            default: obj
-          };
-        }
-
-        function _classCallCheck(instance, Constructor) {
-          if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-          }
-        }
-
-        var Configuration = exports.Configuration = function Configuration() {
-          var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-          _classCallCheck(this, Configuration);
-
-          this.silent = true;
-          this.files = ['.env.local', '.env.production', '.env.test', '.env.development', '.env', '.env.nod'];
-          this.root = _path2.default.dirname(require.main.filename);
-
-          Object.assign(this, options);
-
-          return this;
-        };
+        this.silent = true;
+        this.files = ['.env.local', '.env.production', '.env.test', '.env.development', '.env', '.env.nod'];
+        this.root = path.dirname(require.main.filename);
+        Object.assign(this, options);
+        return this;
       });
+
+      _export('Configuration', Configuration);
     }
   };
 });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbmZpZ3VyYXRpb24uanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7WUFFYSx3Q0FlWCxTQWZXLGFBZVgsR0FBMEI7Y0FBZCxnRUFBVSxrQkFBSTs7Z0NBZmYsZUFlZTs7ZUFiMUIsU0FBUyxLQWFpQjtlQVgxQixRQUFRLENBQ04sWUFETSxFQUVOLGlCQUZNLEVBR04sV0FITSxFQUlOLGtCQUpNLEVBS04sTUFMTSxFQU1OLFVBTk0sRUFXa0I7ZUFGMUIsT0FBTyxlQUFLLE9BQUwsQ0FBYSxRQUFRLElBQVIsQ0FBYSxRQUFiLEVBRU07O0FBQ3hCLGlCQUFPLE1BQVAsQ0FBYyxJQUFkLEVBQW9CLE9BQXBCLEVBRHdCOztBQUd4QixpQkFBTyxJQUFQLENBSHdCO1NBQTFCIiwiZmlsZSI6ImNvbmZpZ3VyYXRpb24uanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgcGF0aCBmcm9tICdwYXRoJztcblxuZXhwb3J0IGNsYXNzIENvbmZpZ3VyYXRpb24ge1xuXG4gIHNpbGVudCA9IHRydWU7XG5cbiAgZmlsZXMgPSBbXG4gICAgJy5lbnYubG9jYWwnLFxuICAgICcuZW52LnByb2R1Y3Rpb24nLFxuICAgICcuZW52LnRlc3QnLFxuICAgICcuZW52LmRldmVsb3BtZW50JyxcbiAgICAnLmVudicsXG4gICAgJy5lbnYubm9kJ1xuICBdO1xuXG4gIHJvb3QgPSBwYXRoLmRpcm5hbWUocmVxdWlyZS5tYWluLmZpbGVuYW1lKTtcblxuICBjb25zdHJ1Y3RvcihvcHRpb25zID0ge30pIHtcbiAgICBPYmplY3QuYXNzaWduKHRoaXMsIG9wdGlvbnMpO1xuXG4gICAgcmV0dXJuIHRoaXM7XG4gIH1cbn1cbiJdLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbmZpZ3VyYXRpb24uanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7WUFpQmMsZ0VBQVUiLCJmaWxlIjoiY29uZmlndXJhdGlvbi5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBwYXRoIGZyb20gJ3BhdGgnO1xuXG5leHBvcnQgY2xhc3MgQ29uZmlndXJhdGlvbiB7XG5cbiAgc2lsZW50ID0gdHJ1ZTtcblxuICBmaWxlcyA9IFtcbiAgICAnLmVudi5sb2NhbCcsXG4gICAgJy5lbnYucHJvZHVjdGlvbicsXG4gICAgJy5lbnYudGVzdCcsXG4gICAgJy5lbnYuZGV2ZWxvcG1lbnQnLFxuICAgICcuZW52JyxcbiAgICAnLmVudi5ub2QnXG4gIF07XG5cbiAgcm9vdCA9IHBhdGguZGlybmFtZShyZXF1aXJlLm1haW4uZmlsZW5hbWUpO1xuXG4gIGNvbnN0cnVjdG9yKG9wdGlvbnMgPSB7fSkge1xuICAgIE9iamVjdC5hc3NpZ24odGhpcywgb3B0aW9ucyk7XG5cbiAgICByZXR1cm4gdGhpcztcbiAgfVxufVxuIl0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9
