@@ -1,17 +1,19 @@
 import 'source-map-support/register';
-import "babel-polyfill";
+import 'babel-polyfill';
 import path from 'path';
-import console from 'console';
-import loader from 'dotenv';
+import loading from 'dotenv';
+import logger from 'console';
 import filter from 'filter-object';
 import autobind from 'autobind-decorator';
-import { Base } from '@nod/base';
+import { Configuration } from './configuration';
 import configurator from 'node-env-configuration';
+import { inject } from 'aurelia-dependency-injection';
 import { param, returns, Optional as optional } from 'decorate-this';
 
 const PROTECTED = Symbol('PROTECTED');
 
-export class Environment extends Base {
+@inject(Configuration)
+export class Environment {
 
   @autobind
   @param(optional({
@@ -34,12 +36,13 @@ export class Environment extends Base {
   load() {
     this.options.files.forEach((file)  => {
       let filePath = this.makePath(file);
-      let status = this.options.loader.load({
+      let status = this.loader.load({
         silent : true,
         path : filePath
       });
       if (!status && this.options.silent !== true) {
-        console.warn(`${this.constructor.name}.load: '${file}' could not found at path: ${filePath}`);
+        console.warn(`${this.constructor.name}.load:`);
+        console.warn(`'${file}' could not found at path: ${filePath}`);
       }
     });
     return process.env;
@@ -79,33 +82,27 @@ export class Environment extends Base {
     return JSON.stringify(filter(this.config, excludes));
   }
 
-  constructor(options = {}) {
-    super(options, {
-      silent      : true,
-      files       : [
-        '.env.local',
-        '.env.production',
-        '.env.test',
-        '.env.development',
-        '.env',
-        '.env.nod'
-      ],
-      root : path.dirname(require.main.filename),
-      configurator,
-      loader
+  constructor(
+    options = new Configuration(),
+    console = logger,
+    configurify = configurator,
+    loader = loading
+  ) {
+
+    Object.assign(this, { loader, console, options, configurify });
+
+    Object.defineProperty(this, PROTECTED, {
+      enumarable : false,
+      value : {
+        ENV    : {},
+        config : {}
+      }
     });
 
-    this[PROTECTED] = this[PROTECTED] || {};
+    this[PROTECTED].ENV = this.load();
 
-    Object.assign(this[PROTECTED], {
-      ENV    : {},
-      config : {}
-    });
-
-    this.ENV = this.load();
-
-    let warn = (this.options.silent !== true) ? console.warn.bind(console) : function() {};
-    this.config = this.options.configurator(undefined, undefined, warn);
+    let warn = (this.options.silent !== true) ? this.console.warn.bind(this.console) : function() {};
+    this.config = this.configurify(undefined, undefined, warn);
   }
 }
 
