@@ -1,28 +1,22 @@
-define(['exports', './environment', 'source-map-support/register', 'babel-polyfill'], function (exports, _environment) {
+define(['exports', './index', './test', 'source-map-support/register', 'babel-polyfill'], function (exports, _index, _test) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.environment = undefined;
-
-  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-  };
-
-  var environment = exports.environment = new _environment.Environment();
+  exports.json = exports.config = exports.ENV = exports.environment = undefined;
+  var environment = exports.environment = new _index.Environment();
   exports.default = environment;
   var ENV = environment.ENV;
   var config = environment.config;
-
-  if ((typeof ENV === 'undefined' ? 'undefined' : _typeof(ENV)) !== 'object') {
-    throw new Error('Environment variables are could not parsed');
-  }
-
-  if ((typeof config === 'undefined' ? 'undefined' : _typeof(config)) !== 'object') {
-    throw new Error('Environment variables are could not converted into object');
-  }
+  var json = environment.json;
+  exports.ENV = ENV;
+  exports.config = config;
+  exports.json = json;
+  new _test.Test({
+    ENV: ENV,
+    config: config,
+    json: json
+  });
 });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluc3RhbmNlLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7O01BSVcsb0NBQWM7b0JBQ1YiLCJmaWxlIjoiaW5zdGFuY2UuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgJ3NvdXJjZS1tYXAtc3VwcG9ydC9yZWdpc3Rlcic7XG5pbXBvcnQgXCJiYWJlbC1wb2x5ZmlsbFwiO1xuaW1wb3J0IHsgRW52aXJvbm1lbnQgfSBmcm9tICcuL2Vudmlyb25tZW50JztcblxuZXhwb3J0IGxldCBlbnZpcm9ubWVudCA9IG5ldyBFbnZpcm9ubWVudCgpO1xuZXhwb3J0IGRlZmF1bHQgZW52aXJvbm1lbnQ7XG5cbmxldCB7IEVOViwgY29uZmlnIH0gPSBlbnZpcm9ubWVudDtcblxuaWYgKCB0eXBlb2YgRU5WICE9PSAnb2JqZWN0Jykge1xuICB0aHJvdyBuZXcgRXJyb3IoJ0Vudmlyb25tZW50IHZhcmlhYmxlcyBhcmUgY291bGQgbm90IHBhcnNlZCcpO1xufVxuXG5pZiAoIHR5cGVvZiBjb25maWcgIT09ICdvYmplY3QnKSB7XG4gIHRocm93IG5ldyBFcnJvcignRW52aXJvbm1lbnQgdmFyaWFibGVzIGFyZSBjb3VsZCBub3QgY29udmVydGVkIGludG8gb2JqZWN0Jyk7XG59XG4iXSwic291cmNlUm9vdCI6Ii9zb3VyY2UvIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluc3RhbmNlLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7TUFLVyxvQ0FBYztvQkFDViIsImZpbGUiOiJpbnN0YW5jZS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCAnc291cmNlLW1hcC1zdXBwb3J0L3JlZ2lzdGVyJztcbmltcG9ydCBcImJhYmVsLXBvbHlmaWxsXCI7XG5pbXBvcnQgeyBFbnZpcm9ubWVudCB9IGZyb20gJy4vaW5kZXgnO1xuaW1wb3J0IHsgVGVzdCB9IGZyb20gJy4vdGVzdCc7XG5cbmV4cG9ydCBsZXQgZW52aXJvbm1lbnQgPSBuZXcgRW52aXJvbm1lbnQoKTtcbmV4cG9ydCBkZWZhdWx0IGVudmlyb25tZW50O1xuXG5leHBvcnQgbGV0IHsgRU5WLCBjb25maWcsIGpzb24gfSA9IGVudmlyb25tZW50O1xuXG5uZXcgVGVzdCh7IEVOViwgY29uZmlnLCBqc29uIH0pO1xuIl0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9

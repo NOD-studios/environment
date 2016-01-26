@@ -1,35 +1,37 @@
 'use strict';
 
-System.register(['source-map-support/register', 'babel-polyfill', './environment'], function (_export, _context) {
-  var Environment, _typeof, environment, ENV, config;
-
+System.register(['source-map-support/register', 'babel-polyfill', './index', './test'], function (_export, _context) {
+  var Environment, Test, environment, ENV, config, json;
   return {
-    setters: [function (_sourceMapSupportRegister) {}, function (_babelPolyfill) {}, function (_environment) {
-      Environment = _environment.Environment;
+    setters: [function (_sourceMapSupportRegister) {}, function (_babelPolyfill) {}, function (_index) {
+      Environment = _index.Environment;
+    }, function (_test) {
+      Test = _test.Test;
     }],
     execute: function () {
-      _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-        return typeof obj;
-      } : function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-      };
-
       _export('environment', environment = new Environment());
 
       _export('environment', environment);
 
       _export('default', environment);
 
-      ENV = environment.ENV;
-      config = environment.config;
+      _export('ENV', ENV = environment.ENV);
 
-      if ((typeof ENV === 'undefined' ? 'undefined' : _typeof(ENV)) !== 'object') {
-        throw new Error('Environment variables are could not parsed');
-      }
+      _export('config', config = environment.config);
 
-      if ((typeof config === 'undefined' ? 'undefined' : _typeof(config)) !== 'object') {
-        throw new Error('Environment variables are could not converted into object');
-      }
+      _export('json', json = environment.json);
+
+      _export('ENV', ENV);
+
+      _export('config', config);
+
+      _export('json', json);
+
+      new Test({
+        ENV: ENV,
+        config: config,
+        json: json
+      });
     }
   };
 });

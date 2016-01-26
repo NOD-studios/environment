@@ -3,46 +3,15 @@ import 'babel-polyfill';
 import path from 'path';
 import logger from 'console';
 import envLoader from 'dotenv';
-import filter from 'filter-object';
+import objectFilter from 'filter-object';
 import autobind from 'autobind-decorator';
 import envConfigurator from 'node-env-configuration';
-import { param, returns, Optional as optional } from 'decorate-this';
+import { Configuration } from './configuration';
+import { param, returns, Optional as optional, AnyOf as anyOf } from 'decorate-this';
 
 const PROTECTED = Symbol('PROTECTED');
 
-export class Configuration {
-
-  silent = true;
-
-  files = [
-    '.env.local',
-    '.env.production',
-    '.env.test',
-    '.env.development',
-    '.env',
-    '.env.nod'
-  ];
-
-  root = path.dirname(require.main.filename);
-
-  constructor(options = {}) {
-    Object.assign(this, options);
-
-    return this;
-  }
-}
-
 export class Environment {
-
-  @autobind
-  @param(optional({
-    root  : optional(String),
-    files : optional(Array)
-  }))
-  @returns(Object)
-  setOptions(options = {}) {
-    return super.setOptions(options);
-  }
 
   @param(String)
   @returns(String)
@@ -98,21 +67,32 @@ export class Environment {
   }
 
   @autobind
+  @param(optional(anyOf(Boolean, String, Array, Object)))
+  @returns(Object)
+  getFilteredConfig(exclude = false) {
+    let excludes = exclude || this.options.exclude || this.config.exclude || false;
+    excludes = typeof excludes === 'string' ? excludes.split(',') : excludes;
+    excludes = excludes === false ? '*' : excludes;
+
+    return this.filter(this.config, excludes);
+  }
+
+  @autobind
+  @param(optional(anyOf(Boolean, String, Array, Object)))
   @returns(String)
-  getJson() {
-    let excludes = this.config.EXCLUDE || '';
-    excludes = excludes.split(',') || [];
-    return JSON.stringify(filter(this.config, excludes));
+  getJson(exclude = false) {
+    return JSON.stringify(this.getFilteredConfig(exclude));
   }
 
   constructor(
     options = new Configuration(),
     console = logger,
     loader = envLoader,
-    configurator = envConfigurator
+    configurator = envConfigurator,
+    filter = objectFilter
   ) {
 
-    Object.assign(this, { options, loader, console, configurator });
+    Object.assign(this, { options, loader, console, configurator, filter });
 
     Object.defineProperty(this, PROTECTED, {
       enumarable : false,
@@ -124,7 +104,11 @@ export class Environment {
 
     this[PROTECTED].ENV = this.load();
 
-    this.config = this.configurator(undefined, undefined, this.console.warn);
+    this.config = this.configurator.apply(this.configurator, [
+      undefined,
+      undefined,
+      this.options.silent ? function() {} : this.console.warn
+    ]);
   }
 }
 

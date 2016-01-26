@@ -1,16 +1,11 @@
 import 'source-map-support/register';
 import "babel-polyfill";
-import { Environment } from './environment';
+import { Environment } from './index';
+import { Test } from './test';
 
 export let environment = new Environment();
 export default environment;
 
-let { ENV, config } = environment;
+export let { ENV, config, json } = environment;
 
-if ( typeof ENV !== 'object') {
-  throw new Error('Environment variables are could not parsed');
-}
-
-if ( typeof config !== 'object') {
-  throw new Error('Environment variables are could not converted into object');
-}
+new Test({ ENV, config, json });

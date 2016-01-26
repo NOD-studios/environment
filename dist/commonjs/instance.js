@@ -1,28 +1,26 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.environment = undefined;
+exports.json = exports.config = exports.ENV = exports.environment = undefined;
 
 require('source-map-support/register');
 
 require('babel-polyfill');
 
-var _environment = require('./environment');
+var _index = require('./index');
 
-var environment = exports.environment = new _environment.Environment();
+var _test = require('./test');
+
+var environment = exports.environment = new _index.Environment();
 exports.default = environment;
 var ENV = environment.ENV;
 var config = environment.config;
+var json = environment.json;
+exports.ENV = ENV;
+exports.config = config;
+exports.json = json;
 
-if ((typeof ENV === 'undefined' ? 'undefined' : _typeof(ENV)) !== 'object') {
-  throw new Error('Environment variables are could not parsed');
-}
-
-if ((typeof config === 'undefined' ? 'undefined' : _typeof(config)) !== 'object') {
-  throw new Error('Environment variables are could not converted into object');
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluc3RhbmNlLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7OztBQUlPLElBQUksb0NBQWMsOEJBQWQ7a0JBQ0k7SUFFVCxNQUFnQixZQUFoQjtJQUFLLFNBQVcsWUFBWDs7QUFFWCxJQUFLLFFBQU8saURBQVAsS0FBZSxRQUFmLEVBQXlCO0FBQzVCLFFBQU0sSUFBSSxLQUFKLENBQVUsNENBQVYsQ0FBTixDQUQ0QjtDQUE5Qjs7QUFJQSxJQUFLLFFBQU8sdURBQVAsS0FBa0IsUUFBbEIsRUFBNEI7QUFDL0IsUUFBTSxJQUFJLEtBQUosQ0FBVSwyREFBVixDQUFOLENBRCtCO0NBQWpDIiwiZmlsZSI6Imluc3RhbmNlLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICdzb3VyY2UtbWFwLXN1cHBvcnQvcmVnaXN0ZXInO1xuaW1wb3J0IFwiYmFiZWwtcG9seWZpbGxcIjtcbmltcG9ydCB7IEVudmlyb25tZW50IH0gZnJvbSAnLi9lbnZpcm9ubWVudCc7XG5cbmV4cG9ydCBsZXQgZW52aXJvbm1lbnQgPSBuZXcgRW52aXJvbm1lbnQoKTtcbmV4cG9ydCBkZWZhdWx0IGVudmlyb25tZW50O1xuXG5sZXQgeyBFTlYsIGNvbmZpZyB9ID0gZW52aXJvbm1lbnQ7XG5cbmlmICggdHlwZW9mIEVOViAhPT0gJ29iamVjdCcpIHtcbiAgdGhyb3cgbmV3IEVycm9yKCdFbnZpcm9ubWVudCB2YXJpYWJsZXMgYXJlIGNvdWxkIG5vdCBwYXJzZWQnKTtcbn1cblxuaWYgKCB0eXBlb2YgY29uZmlnICE9PSAnb2JqZWN0Jykge1xuICB0aHJvdyBuZXcgRXJyb3IoJ0Vudmlyb25tZW50IHZhcmlhYmxlcyBhcmUgY291bGQgbm90IGNvbnZlcnRlZCBpbnRvIG9iamVjdCcpO1xufVxuIl0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9
+new _test.Test({ ENV: ENV, config: config, json: json });
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluc3RhbmNlLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7OztBQUtPLElBQUksb0NBQWMsd0JBQWQ7a0JBQ0k7SUFFRixNQUFzQixZQUF0QjtJQUFLLFNBQWlCLFlBQWpCO0lBQVEsT0FBUyxZQUFUOzs7OztBQUUxQixlQUFTLEVBQUUsUUFBRixFQUFPLGNBQVAsRUFBZSxVQUFmLEVBQVQiLCJmaWxlIjoiaW5zdGFuY2UuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgJ3NvdXJjZS1tYXAtc3VwcG9ydC9yZWdpc3Rlcic7XG5pbXBvcnQgXCJiYWJlbC1wb2x5ZmlsbFwiO1xuaW1wb3J0IHsgRW52aXJvbm1lbnQgfSBmcm9tICcuL2luZGV4JztcbmltcG9ydCB7IFRlc3QgfSBmcm9tICcuL3Rlc3QnO1xuXG5leHBvcnQgbGV0IGVudmlyb25tZW50ID0gbmV3IEVudmlyb25tZW50KCk7XG5leHBvcnQgZGVmYXVsdCBlbnZpcm9ubWVudDtcblxuZXhwb3J0IGxldCB7IEVOViwgY29uZmlnLCBqc29uIH0gPSBlbnZpcm9ubWVudDtcblxubmV3IFRlc3QoeyBFTlYsIGNvbmZpZywganNvbiB9KTtcbiJdLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ==

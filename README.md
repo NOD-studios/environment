@@ -25,10 +25,10 @@ import { Environment } from '@nod/environment';
 
 let environment = new Environment();
 
-let { ENV, config } = environment;
+let { ENV, config, json } = environment;
 
 //config is also environment variables but converted into object notation
-console.log({ config, ENV });
+console.log({ config, ENV, json });
 ```
 
 ## Configuring
@@ -36,7 +36,7 @@ console.log({ config, ENV });
 import { Environment, Configuration as EnvConfig } from '@nod/environment';
 import path from 'path';
 let environment = new Environment(new EnvConfig {
-  root : path.resolve('.'), // root path for .env files
+  silent : true, //should this.console.log issues like missing files or not
   files : [ // files to look in the path    
     '.env.local',
     '.env.production',
@@ -45,8 +45,9 @@ let environment = new Environment(new EnvConfig {
     '.env',
     '.env.nod'
   ],
-  console // for outputting flow info
-});
+  root : path.resolve('.'), // root path for .env files
+  exclude : false //exclude with filter-object for json output
+}, console //console and other deps can replaced);
 ```
 
 ## Build and develop:

@@ -183,7 +183,7 @@ gulp.task('watch', () => {
     paths.js
   ], gulp.series(
     'build',
-    'run-instance'
+    'test'
   ));
 });
 
@@ -207,7 +207,7 @@ gulp.task(
   'default',
   gulp.series(
     'build',
-    'run-instance',
+    'test',
     'watch'
   )
 );

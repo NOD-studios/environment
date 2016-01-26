@@ -1,7 +1,13 @@
 'use strict';
 
-System.register(['source-map-support/register', 'babel-polyfill', 'path', 'console', 'dotenv', 'filter-object', 'autobind-decorator', 'node-env-configuration', 'decorate-this'], function (_export, _context) {
-  var path, logger, envLoader, filter, autobind, envConfigurator, param, returns, optional, _createClass, _get, _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _desc, _value, _class2, PROTECTED, Configuration, Environment;
+System.register(['source-map-support/register', 'babel-polyfill', 'path', 'console', 'dotenv', 'filter-object', 'autobind-decorator', 'node-env-configuration', './configuration', 'decorate-this'], function (_export, _context) {
+  var path, logger, envLoader, objectFilter, autobind, envConfigurator, Configuration, param, returns, optional, anyOf, _createClass, _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _desc, _value, _class, PROTECTED, Environment;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
 
   function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
     var desc = {};
@@ -32,12 +38,6 @@ System.register(['source-map-support/register', 'babel-polyfill', 'path', 'conso
     return desc;
   }
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
   return {
     setters: [function (_sourceMapSupportRegister) {}, function (_babelPolyfill) {}, function (_path) {
       path = _path.default;
@@ -46,15 +46,18 @@ System.register(['source-map-support/register', 'babel-polyfill', 'path', 'conso
     }, function (_dotenv) {
       envLoader = _dotenv.default;
     }, function (_filterObject) {
-      filter = _filterObject.default;
+      objectFilter = _filterObject.default;
     }, function (_autobindDecorator) {
       autobind = _autobindDecorator.default;
     }, function (_nodeEnvConfiguration) {
       envConfigurator = _nodeEnvConfiguration.default;
+    }, function (_configuration) {
+      Configuration = _configuration.Configuration;
     }, function (_decorateThis) {
       param = _decorateThis.param;
       returns = _decorateThis.returns;
       optional = _decorateThis.Optional;
+      anyOf = _decorateThis.AnyOf;
     }],
     execute: function () {
       _createClass = function () {
@@ -75,58 +78,10 @@ System.register(['source-map-support/register', 'babel-polyfill', 'path', 'conso
         };
       }();
 
-      _get = function get(object, property, receiver) {
-        if (object === null) object = Function.prototype;
-        var desc = Object.getOwnPropertyDescriptor(object, property);
-
-        if (desc === undefined) {
-          var parent = Object.getPrototypeOf(object);
-
-          if (parent === null) {
-            return undefined;
-          } else {
-            return get(parent, property, receiver);
-          }
-        } else if ("value" in desc) {
-          return desc.value;
-        } else {
-          var getter = desc.get;
-
-          if (getter === undefined) {
-            return undefined;
-          }
-
-          return getter.call(receiver);
-        }
-      };
-
       PROTECTED = Symbol('PROTECTED');
 
-      _export('Configuration', Configuration = function Configuration() {
-        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-        _classCallCheck(this, Configuration);
-
-        this.silent = true;
-        this.files = ['.env.local', '.env.production', '.env.test', '.env.development', '.env', '.env.nod'];
-        this.root = path.dirname(require.main.filename);
-        Object.assign(this, options);
-        return this;
-      });
-
-      _export('Configuration', Configuration);
-
-      _export('Environment', Environment = (_dec = param(optional({
-        root: optional(String),
-        files: optional(Array)
-      })), _dec2 = returns(Object), _dec3 = param(String), _dec4 = returns(String), _dec5 = returns(Object), _dec6 = returns(Object), _dec7 = param(Object), _dec8 = returns(Object), _dec9 = returns(String), (_class2 = function () {
+      _export('Environment', Environment = (_dec = param(String), _dec2 = returns(String), _dec3 = returns(Object), _dec4 = returns(Object), _dec5 = param(Object), _dec6 = returns(Object), _dec7 = param(optional(anyOf(Boolean, String, Array, Object))), _dec8 = returns(Object), _dec9 = param(optional(anyOf(Boolean, String, Array, Object))), _dec10 = returns(String), (_class = function () {
         _createClass(Environment, [{
-          key: 'setOptions',
-          value: function setOptions() {
-            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-            return _get(Object.getPrototypeOf(Environment.prototype), 'setOptions', this).call(this, options);
-          }
-        }, {
           key: 'makePath',
           value: function makePath() {
             var file = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
@@ -166,11 +121,19 @@ System.register(['source-map-support/register', 'babel-polyfill', 'path', 'conso
             return this.config;
           }
         }, {
+          key: 'getFilteredConfig',
+          value: function getFilteredConfig() {
+            var exclude = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+            var excludes = exclude || this.options.exclude || this.config.exclude || false;
+            excludes = typeof excludes === 'string' ? excludes.split(',') : excludes;
+            excludes = excludes === false ? '*' : excludes;
+            return this.filter(this.config, excludes);
+          }
+        }, {
           key: 'getJson',
           value: function getJson() {
-            var excludes = this.config.EXCLUDE || '';
-            excludes = excludes.split(',') || [];
-            return JSON.stringify(filter(this.config, excludes));
+            var exclude = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+            return JSON.stringify(this.getFilteredConfig(exclude));
           }
         }, {
           key: 'config',
@@ -197,6 +160,7 @@ System.register(['source-map-support/register', 'babel-polyfill', 'path', 'conso
           var console = arguments.length <= 1 || arguments[1] === undefined ? logger : arguments[1];
           var loader = arguments.length <= 2 || arguments[2] === undefined ? envLoader : arguments[2];
           var configurator = arguments.length <= 3 || arguments[3] === undefined ? envConfigurator : arguments[3];
+          var filter = arguments.length <= 4 || arguments[4] === undefined ? objectFilter : arguments[4];
 
           _classCallCheck(this, Environment);
 
@@ -204,7 +168,8 @@ System.register(['source-map-support/register', 'babel-polyfill', 'path', 'conso
             options: options,
             loader: loader,
             console: console,
-            configurator: configurator
+            configurator: configurator,
+            filter: filter
           });
           Object.defineProperty(this, PROTECTED, {
             enumarable: false,
@@ -214,11 +179,11 @@ System.register(['source-map-support/register', 'babel-polyfill', 'path', 'conso
             }
           });
           this[PROTECTED].ENV = this.load();
-          this.config = this.configurator(undefined, undefined, this.console.warn);
+          this.config = this.configurator.apply(this.configurator, [undefined, undefined, this.options.silent ? function () {} : this.console.warn]);
         }
 
         return Environment;
-      }(), (_applyDecoratedDescriptor(_class2.prototype, 'setOptions', [autobind, _dec, _dec2], Object.getOwnPropertyDescriptor(_class2.prototype, 'setOptions'), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, 'makePath', [_dec3, _dec4], Object.getOwnPropertyDescriptor(_class2.prototype, 'makePath'), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, 'load', [autobind, _dec5], Object.getOwnPropertyDescriptor(_class2.prototype, 'load'), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, 'getConfig', [autobind, _dec6], Object.getOwnPropertyDescriptor(_class2.prototype, 'getConfig'), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, 'setConfig', [autobind, _dec7, _dec8], Object.getOwnPropertyDescriptor(_class2.prototype, 'setConfig'), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, 'getJson', [autobind, _dec9], Object.getOwnPropertyDescriptor(_class2.prototype, 'getJson'), _class2.prototype)), _class2)));
+      }(), (_applyDecoratedDescriptor(_class.prototype, 'makePath', [_dec, _dec2], Object.getOwnPropertyDescriptor(_class.prototype, 'makePath'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'load', [autobind, _dec3], Object.getOwnPropertyDescriptor(_class.prototype, 'load'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'getConfig', [autobind, _dec4], Object.getOwnPropertyDescriptor(_class.prototype, 'getConfig'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setConfig', [autobind, _dec5, _dec6], Object.getOwnPropertyDescriptor(_class.prototype, 'setConfig'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'getFilteredConfig', [autobind, _dec7, _dec8], Object.getOwnPropertyDescriptor(_class.prototype, 'getFilteredConfig'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'getJson', [autobind, _dec9, _dec10], Object.getOwnPropertyDescriptor(_class.prototype, 'getJson'), _class.prototype)), _class)));
 
       _export('Environment', Environment);
 
@@ -226,4 +191,4 @@ System.register(['source-map-support/register', 'babel-polyfill', 'path', 'conso
     }
   };
 });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVudmlyb25tZW50LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztZQTJCYyxnRUFBVTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Z0JBZVgsZ0VBQVU7Ozs7OztnQkFNWiw2REFBTzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Z0JBc0NOLCtEQUFTOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztjQXNCakIsZ0VBQVUsSUFBSSxhQUFKO2NBQ1YsZ0VBQVU7Y0FDViwrREFBUztjQUNULHFFQUFlIiwiZmlsZSI6ImVudmlyb25tZW50LmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICdzb3VyY2UtbWFwLXN1cHBvcnQvcmVnaXN0ZXInO1xuaW1wb3J0ICdiYWJlbC1wb2x5ZmlsbCc7XG5pbXBvcnQgcGF0aCBmcm9tICdwYXRoJztcbmltcG9ydCBsb2dnZXIgZnJvbSAnY29uc29sZSc7XG5pbXBvcnQgZW52TG9hZGVyIGZyb20gJ2RvdGVudic7XG5pbXBvcnQgZmlsdGVyIGZyb20gJ2ZpbHRlci1vYmplY3QnO1xuaW1wb3J0IGF1dG9iaW5kIGZyb20gJ2F1dG9iaW5kLWRlY29yYXRvcic7XG5pbXBvcnQgZW52Q29uZmlndXJhdG9yIGZyb20gJ25vZGUtZW52LWNvbmZpZ3VyYXRpb24nO1xuaW1wb3J0IHsgcGFyYW0sIHJldHVybnMsIE9wdGlvbmFsIGFzIG9wdGlvbmFsIH0gZnJvbSAnZGVjb3JhdGUtdGhpcyc7XG5cbmNvbnN0IFBST1RFQ1RFRCA9IFN5bWJvbCgnUFJPVEVDVEVEJyk7XG5cbmV4cG9ydCBjbGFzcyBDb25maWd1cmF0aW9uIHtcblxuICBzaWxlbnQgPSB0cnVlO1xuXG4gIGZpbGVzID0gW1xuICAgICcuZW52LmxvY2FsJyxcbiAgICAnLmVudi5wcm9kdWN0aW9uJyxcbiAgICAnLmVudi50ZXN0JyxcbiAgICAnLmVudi5kZXZlbG9wbWVudCcsXG4gICAgJy5lbnYnLFxuICAgICcuZW52Lm5vZCdcbiAgXTtcblxuICByb290ID0gcGF0aC5kaXJuYW1lKHJlcXVpcmUubWFpbi5maWxlbmFtZSk7XG5cbiAgY29uc3RydWN0b3Iob3B0aW9ucyA9IHt9KSB7XG4gICAgT2JqZWN0LmFzc2lnbih0aGlzLCBvcHRpb25zKTtcblxuICAgIHJldHVybiB0aGlzO1xuICB9XG59XG5cbmV4cG9ydCBjbGFzcyBFbnZpcm9ubWVudCB7XG5cbiAgQGF1dG9iaW5kXG4gIEBwYXJhbShvcHRpb25hbCh7XG4gICAgcm9vdCAgOiBvcHRpb25hbChTdHJpbmcpLFxuICAgIGZpbGVzIDogb3B0aW9uYWwoQXJyYXkpXG4gIH0pKVxuICBAcmV0dXJucyhPYmplY3QpXG4gIHNldE9wdGlvbnMob3B0aW9ucyA9IHt9KSB7XG4gICAgcmV0dXJuIHN1cGVyLnNldE9wdGlvbnMob3B0aW9ucyk7XG4gIH1cblxuICBAcGFyYW0oU3RyaW5nKVxuICBAcmV0dXJucyhTdHJpbmcpXG4gIG1ha2VQYXRoKGZpbGUgPSAnJykge1xuICAgIHJldHVybiBwYXRoLmpvaW4ocGF0aC5yZXNvbHZlKGAke3RoaXMub3B0aW9ucy5yb290fWApLCBgJHtmaWxlfWApO1xuICB9XG5cbiAgQGF1dG9iaW5kXG4gIEByZXR1cm5zKE9iamVjdClcbiAgbG9hZCgpIHtcbiAgICB0aGlzLm9wdGlvbnMuZmlsZXMuZm9yRWFjaCgoZmlsZSkgID0+IHtcbiAgICAgIGxldCBmaWxlUGF0aCA9IHRoaXMubWFrZVBhdGgoZmlsZSk7XG4gICAgICBsZXQgc3RhdHVzID0gdGhpcy5sb2FkZXIubG9hZCh7XG4gICAgICAgIHNpbGVudCA6IHRydWUsXG4gICAgICAgIHBhdGggOiBmaWxlUGF0aFxuICAgICAgfSk7XG4gICAgICBpZiAoIXN0YXR1cyAmJiB0aGlzLm9wdGlvbnMuc2lsZW50ICE9PSB0cnVlKSB7XG4gICAgICAgIHRoaXMuY29uc29sZS53YXJuKGAke3RoaXMuY29uc3RydWN0b3IubmFtZX0ubG9hZDpgKTtcbiAgICAgICAgdGhpcy5jb25zb2xlLndhcm4oYCcke2ZpbGV9JyBjb3VsZCBub3QgZm91bmQgYXQgcGF0aDogJHtmaWxlUGF0aH1gKTtcbiAgICAgIH1cbiAgICB9KTtcbiAgICByZXR1cm4gcHJvY2Vzcy5lbnY7XG4gIH1cblxuICBnZXQgY29uZmlnKCkge1xuICAgIHJldHVybiB0aGlzLmdldENvbmZpZygpO1xuICB9XG5cbiAgQGF1dG9iaW5kXG4gIEByZXR1cm5zKE9iamVjdClcbiAgZ2V0Q29uZmlnKCkge1xuICAgIHJldHVybiB0aGlzW1BST1RFQ1RFRF0uY29uZmlnO1xuICB9XG5cbiAgc2V0IGNvbmZpZyguLi5wYXJhbXMpIHtcbiAgICByZXR1cm4gdGhpcy5zZXRDb25maWcoLi4ucGFyYW1zKTtcbiAgfVxuXG4gIEBhdXRvYmluZFxuICBAcGFyYW0oT2JqZWN0KVxuICBAcmV0dXJucyhPYmplY3QpXG4gIHNldENvbmZpZyhjb25maWcgPSB7fSkge1xuICAgIE9iamVjdC5hc3NpZ24odGhpc1tQUk9URUNURURdLmNvbmZpZywgY29uZmlnKTtcbiAgICByZXR1cm4gdGhpcy5jb25maWc7XG4gIH1cblxuICBnZXQganNvbigpIHtcbiAgICByZXR1cm4gdGhpcy5nZXRKc29uKCk7XG4gIH1cblxuICBnZXQgRU5WKCkge1xuICAgIHJldHVybiBPYmplY3QuZnJlZXplKHRoaXNbUFJPVEVDVEVEXS5FTlYpO1xuICB9XG5cbiAgQGF1dG9iaW5kXG4gIEByZXR1cm5zKFN0cmluZylcbiAgZ2V0SnNvbigpIHtcbiAgICBsZXQgZXhjbHVkZXMgPSB0aGlzLmNvbmZpZy5FWENMVURFIHx8ICcnO1xuICAgIGV4Y2x1ZGVzID0gZXhjbHVkZXMuc3BsaXQoJywnKSB8fCBbXTtcbiAgICByZXR1cm4gSlNPTi5zdHJpbmdpZnkoZmlsdGVyKHRoaXMuY29uZmlnLCBleGNsdWRlcykpO1xuICB9XG5cbiAgY29uc3RydWN0b3IoXG4gICAgb3B0aW9ucyA9IG5ldyBDb25maWd1cmF0aW9uKCksXG4gICAgY29uc29sZSA9IGxvZ2dlcixcbiAgICBsb2FkZXIgPSBlbnZMb2FkZXIsXG4gICAgY29uZmlndXJhdG9yID0gZW52Q29uZmlndXJhdG9yXG4gICkge1xuXG4gICAgT2JqZWN0LmFzc2lnbih0aGlzLCB7IG9wdGlvbnMsIGxvYWRlciwgY29uc29sZSwgY29uZmlndXJhdG9yIH0pO1xuXG4gICAgT2JqZWN0LmRlZmluZVByb3BlcnR5KHRoaXMsIFBST1RFQ1RFRCwge1xuICAgICAgZW51bWFyYWJsZSA6IGZhbHNlLFxuICAgICAgdmFsdWUgOiB7XG4gICAgICAgIEVOViAgICA6IHt9LFxuICAgICAgICBjb25maWcgOiB7fVxuICAgICAgfVxuICAgIH0pO1xuXG4gICAgdGhpc1tQUk9URUNURURdLkVOViA9IHRoaXMubG9hZCgpO1xuXG4gICAgdGhpcy5jb25maWcgPSB0aGlzLmNvbmZpZ3VyYXRvcih1bmRlZmluZWQsIHVuZGVmaW5lZCwgdGhpcy5jb25zb2xlLndhcm4pO1xuICB9XG59XG5cbmV4cG9ydCBkZWZhdWx0IEVudmlyb25tZW50O1xuIl0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVudmlyb25tZW50LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O2dCQWlCVyw2REFBTzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Z0JBc0NOLCtEQUFTOzs7Ozs7O2dCQWdCRCxnRUFBVTs7Ozs7Ozs7O2dCQVdwQixnRUFBVTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O2NBS2hCLGdFQUFVLElBQUksYUFBSjtjQUNWLGdFQUFVO2NBQ1YsK0RBQVM7Y0FDVCxxRUFBZTtjQUNmLCtEQUFTIiwiZmlsZSI6ImVudmlyb25tZW50LmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICdzb3VyY2UtbWFwLXN1cHBvcnQvcmVnaXN0ZXInO1xuaW1wb3J0ICdiYWJlbC1wb2x5ZmlsbCc7XG5pbXBvcnQgcGF0aCBmcm9tICdwYXRoJztcbmltcG9ydCBsb2dnZXIgZnJvbSAnY29uc29sZSc7XG5pbXBvcnQgZW52TG9hZGVyIGZyb20gJ2RvdGVudic7XG5pbXBvcnQgb2JqZWN0RmlsdGVyIGZyb20gJ2ZpbHRlci1vYmplY3QnO1xuaW1wb3J0IGF1dG9iaW5kIGZyb20gJ2F1dG9iaW5kLWRlY29yYXRvcic7XG5pbXBvcnQgZW52Q29uZmlndXJhdG9yIGZyb20gJ25vZGUtZW52LWNvbmZpZ3VyYXRpb24nO1xuaW1wb3J0IHsgQ29uZmlndXJhdGlvbiB9IGZyb20gJy4vY29uZmlndXJhdGlvbic7XG5pbXBvcnQgeyBwYXJhbSwgcmV0dXJucywgT3B0aW9uYWwgYXMgb3B0aW9uYWwsIEFueU9mIGFzIGFueU9mIH0gZnJvbSAnZGVjb3JhdGUtdGhpcyc7XG5cbmNvbnN0IFBST1RFQ1RFRCA9IFN5bWJvbCgnUFJPVEVDVEVEJyk7XG5cbmV4cG9ydCBjbGFzcyBFbnZpcm9ubWVudCB7XG5cbiAgQHBhcmFtKFN0cmluZylcbiAgQHJldHVybnMoU3RyaW5nKVxuICBtYWtlUGF0aChmaWxlID0gJycpIHtcbiAgICByZXR1cm4gcGF0aC5qb2luKHBhdGgucmVzb2x2ZShgJHt0aGlzLm9wdGlvbnMucm9vdH1gKSwgYCR7ZmlsZX1gKTtcbiAgfVxuXG4gIEBhdXRvYmluZFxuICBAcmV0dXJucyhPYmplY3QpXG4gIGxvYWQoKSB7XG4gICAgdGhpcy5vcHRpb25zLmZpbGVzLmZvckVhY2goKGZpbGUpICA9PiB7XG4gICAgICBsZXQgZmlsZVBhdGggPSB0aGlzLm1ha2VQYXRoKGZpbGUpO1xuICAgICAgbGV0IHN0YXR1cyA9IHRoaXMubG9hZGVyLmxvYWQoe1xuICAgICAgICBzaWxlbnQgOiB0cnVlLFxuICAgICAgICBwYXRoIDogZmlsZVBhdGhcbiAgICAgIH0pO1xuICAgICAgaWYgKCFzdGF0dXMgJiYgdGhpcy5vcHRpb25zLnNpbGVudCAhPT0gdHJ1ZSkge1xuICAgICAgICB0aGlzLmNvbnNvbGUud2FybihgJHt0aGlzLmNvbnN0cnVjdG9yLm5hbWV9LmxvYWQ6YCk7XG4gICAgICAgIHRoaXMuY29uc29sZS53YXJuKGAnJHtmaWxlfScgY291bGQgbm90IGZvdW5kIGF0IHBhdGg6ICR7ZmlsZVBhdGh9YCk7XG4gICAgICB9XG4gICAgfSk7XG4gICAgcmV0dXJuIHByb2Nlc3MuZW52O1xuICB9XG5cbiAgZ2V0IGNvbmZpZygpIHtcbiAgICByZXR1cm4gdGhpcy5nZXRDb25maWcoKTtcbiAgfVxuXG4gIEBhdXRvYmluZFxuICBAcmV0dXJucyhPYmplY3QpXG4gIGdldENvbmZpZygpIHtcbiAgICByZXR1cm4gdGhpc1tQUk9URUNURURdLmNvbmZpZztcbiAgfVxuXG4gIHNldCBjb25maWcoLi4ucGFyYW1zKSB7XG4gICAgcmV0dXJuIHRoaXMuc2V0Q29uZmlnKC4uLnBhcmFtcyk7XG4gIH1cblxuICBAYXV0b2JpbmRcbiAgQHBhcmFtKE9iamVjdClcbiAgQHJldHVybnMoT2JqZWN0KVxuICBzZXRDb25maWcoY29uZmlnID0ge30pIHtcbiAgICBPYmplY3QuYXNzaWduKHRoaXNbUFJPVEVDVEVEXS5jb25maWcsIGNvbmZpZyk7XG4gICAgcmV0dXJuIHRoaXMuY29uZmlnO1xuICB9XG5cbiAgZ2V0IGpzb24oKSB7XG4gICAgcmV0dXJuIHRoaXMuZ2V0SnNvbigpO1xuICB9XG5cbiAgZ2V0IEVOVigpIHtcbiAgICByZXR1cm4gT2JqZWN0LmZyZWV6ZSh0aGlzW1BST1RFQ1RFRF0uRU5WKTtcbiAgfVxuXG4gIEBhdXRvYmluZFxuICBAcGFyYW0ob3B0aW9uYWwoYW55T2YoQm9vbGVhbiwgU3RyaW5nLCBBcnJheSwgT2JqZWN0KSkpXG4gIEByZXR1cm5zKE9iamVjdClcbiAgZ2V0RmlsdGVyZWRDb25maWcoZXhjbHVkZSA9IGZhbHNlKSB7XG4gICAgbGV0IGV4Y2x1ZGVzID0gZXhjbHVkZSB8fCB0aGlzLm9wdGlvbnMuZXhjbHVkZSB8fCB0aGlzLmNvbmZpZy5leGNsdWRlIHx8IGZhbHNlO1xuICAgIGV4Y2x1ZGVzID0gdHlwZW9mIGV4Y2x1ZGVzID09PSAnc3RyaW5nJyA/IGV4Y2x1ZGVzLnNwbGl0KCcsJykgOiBleGNsdWRlcztcbiAgICBleGNsdWRlcyA9IGV4Y2x1ZGVzID09PSBmYWxzZSA/ICcqJyA6IGV4Y2x1ZGVzO1xuXG4gICAgcmV0dXJuIHRoaXMuZmlsdGVyKHRoaXMuY29uZmlnLCBleGNsdWRlcyk7XG4gIH1cblxuICBAYXV0b2JpbmRcbiAgQHBhcmFtKG9wdGlvbmFsKGFueU9mKEJvb2xlYW4sIFN0cmluZywgQXJyYXksIE9iamVjdCkpKVxuICBAcmV0dXJucyhTdHJpbmcpXG4gIGdldEpzb24oZXhjbHVkZSA9IGZhbHNlKSB7XG4gICAgcmV0dXJuIEpTT04uc3RyaW5naWZ5KHRoaXMuZ2V0RmlsdGVyZWRDb25maWcoZXhjbHVkZSkpO1xuICB9XG5cbiAgY29uc3RydWN0b3IoXG4gICAgb3B0aW9ucyA9IG5ldyBDb25maWd1cmF0aW9uKCksXG4gICAgY29uc29sZSA9IGxvZ2dlcixcbiAgICBsb2FkZXIgPSBlbnZMb2FkZXIsXG4gICAgY29uZmlndXJhdG9yID0gZW52Q29uZmlndXJhdG9yLFxuICAgIGZpbHRlciA9IG9iamVjdEZpbHRlclxuICApIHtcblxuICAgIE9iamVjdC5hc3NpZ24odGhpcywgeyBvcHRpb25zLCBsb2FkZXIsIGNvbnNvbGUsIGNvbmZpZ3VyYXRvciwgZmlsdGVyIH0pO1xuXG4gICAgT2JqZWN0LmRlZmluZVByb3BlcnR5KHRoaXMsIFBST1RFQ1RFRCwge1xuICAgICAgZW51bWFyYWJsZSA6IGZhbHNlLFxuICAgICAgdmFsdWUgOiB7XG4gICAgICAgIEVOViAgICA6IHt9LFxuICAgICAgICBjb25maWcgOiB7fVxuICAgICAgfVxuICAgIH0pO1xuXG4gICAgdGhpc1tQUk9URUNURURdLkVOViA9IHRoaXMubG9hZCgpO1xuXG4gICAgdGhpcy5jb25maWcgPSB0aGlzLmNvbmZpZ3VyYXRvci5hcHBseSh0aGlzLmNvbmZpZ3VyYXRvciwgW1xuICAgICAgdW5kZWZpbmVkLFxuICAgICAgdW5kZWZpbmVkLFxuICAgICAgdGhpcy5vcHRpb25zLnNpbGVudCA/IGZ1bmN0aW9uKCkge30gOiB0aGlzLmNvbnNvbGUud2FyblxuICAgIF0pO1xuICB9XG59XG5cbmV4cG9ydCBkZWZhdWx0IEVudmlyb25tZW50O1xuIl0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9
