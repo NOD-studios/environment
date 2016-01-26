@@ -1,108 +1,88 @@
-define(['exports', 'path', 'autobind-decorator', 'decorate-this'], function (exports, _path, _autobindDecorator, _decorateThis) {
-  'use strict';
+'use strict';
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dec, _dec2, _desc, _value, _class;
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Configuration = undefined;
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _autobindDecorator = require('autobind-decorator');
+
+var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
+
+var _decorateThis = require('decorate-this');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+  var desc = {};
+  Object['ke' + 'ys'](descriptor).forEach(function (key) {
+    desc[key] = descriptor[key];
   });
-  exports.Configuration = undefined;
+  desc.enumerable = !!desc.enumerable;
+  desc.configurable = !!desc.configurable;
 
-  var _path2 = _interopRequireDefault(_path);
-
-  var _autobindDecorator2 = _interopRequireDefault(_autobindDecorator);
-
-  function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-      default: obj
-    };
+  if ('value' in desc || desc.initializer) {
+    desc.writable = true;
   }
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
+  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+    return decorator(target, property, desc) || desc;
+  }, desc);
+
+  if (context && desc.initializer !== void 0) {
+    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+    desc.initializer = undefined;
   }
 
-  var _createClass = function () {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-
-    return function (Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  }();
-
-  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
-    var desc = {};
-    Object['ke' + 'ys'](descriptor).forEach(function (key) {
-      desc[key] = descriptor[key];
-    });
-    desc.enumerable = !!desc.enumerable;
-    desc.configurable = !!desc.configurable;
-
-    if ('value' in desc || desc.initializer) {
-      desc.writable = true;
-    }
-
-    desc = decorators.slice().reverse().reduce(function (desc, decorator) {
-      return decorator(target, property, desc) || desc;
-    }, desc);
-
-    if (context && desc.initializer !== void 0) {
-      desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
-      desc.initializer = undefined;
-    }
-
-    if (desc.initializer === void 0) {
-      Object['define' + 'Property'](target, property, desc);
-      desc = null;
-    }
-
-    return desc;
+  if (desc.initializer === void 0) {
+    Object['define' + 'Property'](target, property, desc);
+    desc = null;
   }
 
-  var _dec, _dec2, _desc, _value, _class;
+  return desc;
+}
 
-  var Configuration = exports.Configuration = (_dec = (0, _decorateThis.param)((0, _decorateThis.Optional)({
-    exclude: (0, _decorateThis.Optional)((0, _decorateThis.AnyOf)(Boolean, String, Array, Object)),
-    silent: (0, _decorateThis.Optional)(Boolean),
-    root: (0, _decorateThis.Optional)(String),
-    files: (0, _decorateThis.Optional)(Array)
-  })), _dec2 = (0, _decorateThis.returns)(Object), (_class = function () {
-    _createClass(Configuration, [{
-      key: 'setOptions',
-      value: function setOptions() {
-        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-        return Object.assign(this, options);
-      }
-    }]);
-
-    function Configuration() {
+var Configuration = exports.Configuration = (_dec = (0, _decorateThis.param)((0, _decorateThis.Optional)({
+  exclude: (0, _decorateThis.Optional)((0, _decorateThis.AnyOf)(Boolean, String, Array, Object)),
+  silent: (0, _decorateThis.Optional)(Boolean),
+  root: (0, _decorateThis.Optional)(String),
+  files: (0, _decorateThis.Optional)(Array)
+})), _dec2 = (0, _decorateThis.returns)(Object), (_class = function () {
+  _createClass(Configuration, [{
+    key: 'setOptions',
+    value: function setOptions() {
       var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-      _classCallCheck(this, Configuration);
-
-      this.silent = true;
-      this.exclude = '';
-      this.files = ['.env.local', '.env.production', '.env.test', '.env.development', '.env', '.env.nod'];
-      this.root = _path2.default.dirname(require.main.filename);
-
-      this.setOptions(options);
-
-      return this;
+      return Object.assign(this, options);
     }
+  }]);
 
-    return Configuration;
-  }(), (_applyDecoratedDescriptor(_class.prototype, 'setOptions', [_autobindDecorator2.default, _dec, _dec2], Object.getOwnPropertyDescriptor(_class.prototype, 'setOptions'), _class.prototype)), _class));
-  exports.default = Configuration;
-});
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbmZpZ3VyYXRpb24uanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztNQUlhLGdEQWtCVix5QkFBTSw0QkFBUztBQUNkLGFBQVUsNEJBQVMseUJBQU0sT0FBTixFQUFlLE1BQWYsRUFBdUIsS0FBdkIsRUFBOEIsTUFBOUIsQ0FBVCxDQUFWO0FBQ0EsWUFBUyw0QkFBUyxPQUFULENBQVQ7QUFDQSxVQUFRLDRCQUFTLE1BQVQsQ0FBUjtBQUNBLFdBQVEsNEJBQVMsS0FBVCxDQUFSO0dBSkssQ0FBTixXQU1BLDJCQUFRLE1BQVI7aUJBeEJVOzttQ0F5QmM7WUFBZCxnRUFBVSxrQkFBSTs7QUFDdkIsZUFBTyxPQUFPLE1BQVAsQ0FBYyxJQUFkLEVBQW9CLE9BQXBCLENBQVAsQ0FEdUI7Ozs7QUFJekIsYUE3QlcsYUE2QlgsR0FBMEI7VUFBZCxnRUFBVSxrQkFBSTs7NEJBN0JmLGVBNkJlOztXQTNCMUIsU0FBUyxLQTJCaUI7V0F6QjFCLFVBQVUsR0F5QmdCO1dBdkIxQixRQUFRLENBQ04sWUFETSxFQUVOLGlCQUZNLEVBR04sV0FITSxFQUlOLGtCQUpNLEVBS04sTUFMTSxFQU1OLFVBTk0sRUF1QmtCO1dBZDFCLE9BQU8sZUFBSyxPQUFMLENBQWEsUUFBUSxJQUFSLENBQWEsUUFBYixFQWNNOztBQUN4QixXQUFLLFVBQUwsQ0FBZ0IsT0FBaEIsRUFEd0I7O0FBR3hCLGFBQU8sSUFBUCxDQUh3QjtLQUExQjs7V0E3Qlc7O29CQW9DRSIsImZpbGUiOiJjb25maWd1cmF0aW9uLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHBhdGggZnJvbSAncGF0aCc7XG5pbXBvcnQgYXV0b2JpbmQgZnJvbSAnYXV0b2JpbmQtZGVjb3JhdG9yJztcbmltcG9ydCB7IHBhcmFtLCByZXR1cm5zLCBPcHRpb25hbCBhcyBvcHRpb25hbCwgQW55T2YgYXMgYW55T2YgfSBmcm9tICdkZWNvcmF0ZS10aGlzJztcblxuZXhwb3J0IGNsYXNzIENvbmZpZ3VyYXRpb24ge1xuXG4gIHNpbGVudCA9IHRydWU7XG5cbiAgZXhjbHVkZSA9ICcnO1xuXG4gIGZpbGVzID0gW1xuICAgICcuZW52LmxvY2FsJyxcbiAgICAnLmVudi5wcm9kdWN0aW9uJyxcbiAgICAnLmVudi50ZXN0JyxcbiAgICAnLmVudi5kZXZlbG9wbWVudCcsXG4gICAgJy5lbnYnLFxuICAgICcuZW52Lm5vZCdcbiAgXTtcblxuICByb290ID0gcGF0aC5kaXJuYW1lKHJlcXVpcmUubWFpbi5maWxlbmFtZSk7XG5cbiAgQGF1dG9iaW5kXG4gIEBwYXJhbShvcHRpb25hbCh7XG4gICAgZXhjbHVkZSA6IG9wdGlvbmFsKGFueU9mKEJvb2xlYW4sIFN0cmluZywgQXJyYXksIE9iamVjdCkpLFxuICAgIHNpbGVudCA6IG9wdGlvbmFsKEJvb2xlYW4pLFxuICAgIHJvb3QgIDogb3B0aW9uYWwoU3RyaW5nKSxcbiAgICBmaWxlcyA6IG9wdGlvbmFsKEFycmF5KVxuICB9KSlcbiAgQHJldHVybnMoT2JqZWN0KVxuICBzZXRPcHRpb25zKG9wdGlvbnMgPSB7fSkge1xuICAgIHJldHVybiBPYmplY3QuYXNzaWduKHRoaXMsIG9wdGlvbnMpO1xuICB9XG5cbiAgY29uc3RydWN0b3Iob3B0aW9ucyA9IHt9KSB7XG4gICAgdGhpcy5zZXRPcHRpb25zKG9wdGlvbnMpO1xuXG4gICAgcmV0dXJuIHRoaXM7XG4gIH1cbn1cblxuZXhwb3J0IGRlZmF1bHQgQ29uZmlndXJhdGlvbjtcbiJdLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ==
+  function Configuration() {
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    _classCallCheck(this, Configuration);
+
+    this.silent = true;
+    this.exclude = '';
+    this.files = ['.env.local', '.env.production', '.env.test', '.env.development', '.env', '.env.nod'];
+    this.root = _path2.default.dirname(require.main.filename);
+
+    this.setOptions(options);
+
+    return this;
+  }
+
+  return Configuration;
+}(), (_applyDecoratedDescriptor(_class.prototype, 'setOptions', [_autobindDecorator2.default, _dec, _dec2], Object.getOwnPropertyDescriptor(_class.prototype, 'setOptions'), _class.prototype)), _class));
+exports.default = Configuration;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbmZpZ3VyYXRpb24uanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0lBSWEsZ0RBa0JWLHlCQUFNLDRCQUFTO0FBQ2QsV0FBVSw0QkFBUyx5QkFBTSxPQUFOLEVBQWUsTUFBZixFQUF1QixLQUF2QixFQUE4QixNQUE5QixDQUFULENBQVY7QUFDQSxVQUFTLDRCQUFTLE9BQVQsQ0FBVDtBQUNBLFFBQVEsNEJBQVMsTUFBVCxDQUFSO0FBQ0EsU0FBUSw0QkFBUyxLQUFULENBQVI7Q0FKSyxDQUFOLFdBTUEsMkJBQVEsTUFBUjtlQXhCVTs7aUNBeUJjO1VBQWQsZ0VBQVUsa0JBQUk7O0FBQ3ZCLGFBQU8sT0FBTyxNQUFQLENBQWMsSUFBZCxFQUFvQixPQUFwQixDQUFQLENBRHVCOzs7O0FBSXpCLFdBN0JXLGFBNkJYLEdBQTBCO1FBQWQsZ0VBQVUsa0JBQUk7OzBCQTdCZixlQTZCZTs7U0EzQjFCLFNBQVMsS0EyQmlCO1NBekIxQixVQUFVLEdBeUJnQjtTQXZCMUIsUUFBUSxDQUNOLFlBRE0sRUFFTixpQkFGTSxFQUdOLFdBSE0sRUFJTixrQkFKTSxFQUtOLE1BTE0sRUFNTixVQU5NLEVBdUJrQjtTQWQxQixPQUFPLGVBQUssT0FBTCxDQUFhLFFBQVEsSUFBUixDQUFhLFFBQWIsRUFjTTs7QUFDeEIsU0FBSyxVQUFMLENBQWdCLE9BQWhCLEVBRHdCOztBQUd4QixXQUFPLElBQVAsQ0FId0I7R0FBMUI7O1NBN0JXOztrQkFvQ0UiLCJmaWxlIjoiY29uZmlndXJhdGlvbi5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBwYXRoIGZyb20gJ3BhdGgnO1xuaW1wb3J0IGF1dG9iaW5kIGZyb20gJ2F1dG9iaW5kLWRlY29yYXRvcic7XG5pbXBvcnQgeyBwYXJhbSwgcmV0dXJucywgT3B0aW9uYWwgYXMgb3B0aW9uYWwsIEFueU9mIGFzIGFueU9mIH0gZnJvbSAnZGVjb3JhdGUtdGhpcyc7XG5cbmV4cG9ydCBjbGFzcyBDb25maWd1cmF0aW9uIHtcblxuICBzaWxlbnQgPSB0cnVlO1xuXG4gIGV4Y2x1ZGUgPSAnJztcblxuICBmaWxlcyA9IFtcbiAgICAnLmVudi5sb2NhbCcsXG4gICAgJy5lbnYucHJvZHVjdGlvbicsXG4gICAgJy5lbnYudGVzdCcsXG4gICAgJy5lbnYuZGV2ZWxvcG1lbnQnLFxuICAgICcuZW52JyxcbiAgICAnLmVudi5ub2QnXG4gIF07XG5cbiAgcm9vdCA9IHBhdGguZGlybmFtZShyZXF1aXJlLm1haW4uZmlsZW5hbWUpO1xuXG4gIEBhdXRvYmluZFxuICBAcGFyYW0ob3B0aW9uYWwoe1xuICAgIGV4Y2x1ZGUgOiBvcHRpb25hbChhbnlPZihCb29sZWFuLCBTdHJpbmcsIEFycmF5LCBPYmplY3QpKSxcbiAgICBzaWxlbnQgOiBvcHRpb25hbChCb29sZWFuKSxcbiAgICByb290ICA6IG9wdGlvbmFsKFN0cmluZyksXG4gICAgZmlsZXMgOiBvcHRpb25hbChBcnJheSlcbiAgfSkpXG4gIEByZXR1cm5zKE9iamVjdClcbiAgc2V0T3B0aW9ucyhvcHRpb25zID0ge30pIHtcbiAgICByZXR1cm4gT2JqZWN0LmFzc2lnbih0aGlzLCBvcHRpb25zKTtcbiAgfVxuXG4gIGNvbnN0cnVjdG9yKG9wdGlvbnMgPSB7fSkge1xuICAgIHRoaXMuc2V0T3B0aW9ucyhvcHRpb25zKTtcblxuICAgIHJldHVybiB0aGlzO1xuICB9XG59XG5cbmV4cG9ydCBkZWZhdWx0IENvbmZpZ3VyYXRpb247XG4iXSwic291cmNlUm9vdCI6Ii9zb3VyY2UvIn0=
