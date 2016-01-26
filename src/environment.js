@@ -1,5 +1,3 @@
-import 'source-map-support/register';
-import 'babel-polyfill';
 import path from 'path';
 import logger from 'console';
 import envLoader from 'dotenv';

@@ -1,15 +1,17 @@
 'use strict';
 
-System.register(['source-map-support/register', 'babel-polyfill', './index', './test'], function (_export, _context) {
-  var Environment, Test, environment, ENV, config, json;
+System.register(['./configuration', './index', './test'], function (_export, _context) {
+  var Configuration, Environment, Test, environment, ENV, config, json;
   return {
-    setters: [function (_sourceMapSupportRegister) {}, function (_babelPolyfill) {}, function (_index) {
+    setters: [function (_configuration) {
+      Configuration = _configuration.Configuration;
+    }, function (_index) {
       Environment = _index.Environment;
     }, function (_test) {
       Test = _test.Test;
     }],
     execute: function () {
-      _export('environment', environment = new Environment());
+      _export('environment', environment = new Environment(new Configuration()));
 
       _export('environment', environment);
 
