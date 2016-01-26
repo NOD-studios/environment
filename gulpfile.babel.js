@@ -187,6 +187,8 @@ gulp.task('watch', () => {
   ));
 });
 
+gulp.task('postinstall', gulp.series('build'));
+
 gulp.task('preversion', gulp.series('build', () => {
   return exec('git add -A');
 }));
