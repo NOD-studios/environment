@@ -201,7 +201,7 @@ gulp.task('prepublish', () => {
   return exec('npm run build && git add -A');
 });
 
-gulp.task('test', gulp.series('run-instance'));
+gulp.task('test', gulp.series('lint', 'run-instance'));
 
 gulp.task(
   'default',

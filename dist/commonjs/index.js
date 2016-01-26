@@ -1,21 +1,12 @@
-'use strict';
+define(['exports', './environment', './configuration', './test', 'source-map-support/register', 'babel-polyfill'], function (exports, _environment, _configuration, _test) {
+  'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.Test = exports.Configuration = exports.Environment = undefined;
+  exports.Environment = _environment.Environment;
+  exports.Configuration = _configuration.Configuration;
+  exports.Test = _test.Test;
 });
-exports.Test = exports.Configuration = exports.Environment = undefined;
-
-require('source-map-support/register');
-
-require('babel-polyfill');
-
-var _environment = require('./environment');
-
-var _configuration = require('./configuration');
-
-var _test = require('./test');
-
-exports.Environment = _environment.Environment;
-exports.Configuration = _configuration.Configuration;
-exports.Test = _test.Test;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7O1FBT1M7UUFBYTtRQUFlIiwiZmlsZSI6ImluZGV4LmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICdzb3VyY2UtbWFwLXN1cHBvcnQvcmVnaXN0ZXInO1xuaW1wb3J0ICdiYWJlbC1wb2x5ZmlsbCc7XG5cbmltcG9ydCB7IEVudmlyb25tZW50IH0gZnJvbSAnLi9lbnZpcm9ubWVudCc7XG5pbXBvcnQgeyBDb25maWd1cmF0aW9uIH0gZnJvbSAnLi9jb25maWd1cmF0aW9uJztcbmltcG9ydCB7IFRlc3QgfSBmcm9tICcuL3Rlc3QnO1xuXG5leHBvcnQgeyBFbnZpcm9ubWVudCwgQ29uZmlndXJhdGlvbiwgVGVzdCB9O1xuIl0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7VUFPUztVQUFhO1VBQWUiLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgJ3NvdXJjZS1tYXAtc3VwcG9ydC9yZWdpc3Rlcic7XG5pbXBvcnQgJ2JhYmVsLXBvbHlmaWxsJztcblxuaW1wb3J0IHsgRW52aXJvbm1lbnQgfSBmcm9tICcuL2Vudmlyb25tZW50JztcbmltcG9ydCB7IENvbmZpZ3VyYXRpb24gfSBmcm9tICcuL2NvbmZpZ3VyYXRpb24nO1xuaW1wb3J0IHsgVGVzdCB9IGZyb20gJy4vdGVzdCc7XG5cbmV4cG9ydCB7IEVudmlyb25tZW50LCBDb25maWd1cmF0aW9uLCBUZXN0IH07XG4iXSwic291cmNlUm9vdCI6Ii9zb3VyY2UvIn0=
