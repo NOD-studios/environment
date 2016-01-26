@@ -1,7 +1,6 @@
 .env.local
 .env.production
 .env.development
-dist
 
 
 # Created by https://www.gitignore.io/api/node,osx,linux,windows,webstorm
