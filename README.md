@@ -3,6 +3,8 @@
 Creates merged config object after parsing dotenv and current env variables through javascript.
 
 Supports ES5, ES7, AMD, CommonJS, System and ES6 modules.
+
+### Platform
 Works in node.js also should(?) work in browser.
 
 [![GitHub tag][tag-image]][tag-url]
