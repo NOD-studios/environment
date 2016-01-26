@@ -61,7 +61,7 @@ export class Environment {
   }
 
   get ENV() {
-    return Object.freeze(this[PROTECTED].ENV);
+    return this[PROTECTED].ENV;
   }
 
   @autobind
