@@ -1,18 +1,37 @@
 import 'source-map-support/register';
 import 'babel-polyfill';
 import path from 'path';
-import loading from 'dotenv';
 import logger from 'console';
+import envLoader from 'dotenv';
 import filter from 'filter-object';
 import autobind from 'autobind-decorator';
-import { Configuration } from './configuration';
-import configurator from 'node-env-configuration';
-import { inject } from 'aurelia-dependency-injection';
+import envConfigurator from 'node-env-configuration';
 import { param, returns, Optional as optional } from 'decorate-this';
 
 const PROTECTED = Symbol('PROTECTED');
 
-@inject(Configuration)
+export class Configuration {
+
+  silent = true;
+
+  files = [
+    '.env.local',
+    '.env.production',
+    '.env.test',
+    '.env.development',
+    '.env',
+    '.env.nod'
+  ];
+
+  root = path.dirname(require.main.filename);
+
+  constructor(options = {}) {
+    Object.assign(this, options);
+
+    return this;
+  }
+}
+
 export class Environment {
 
   @autobind
@@ -41,8 +60,8 @@ export class Environment {
         path : filePath
       });
       if (!status && this.options.silent !== true) {
-        console.warn(`${this.constructor.name}.load:`);
-        console.warn(`'${file}' could not found at path: ${filePath}`);
+        this.console.warn(`${this.constructor.name}.load:`);
+        this.console.warn(`'${file}' could not found at path: ${filePath}`);
       }
     });
     return process.env;
@@ -74,6 +93,10 @@ export class Environment {
     return this.getJson();
   }
 
+  get ENV() {
+    return Object.freeze(this[PROTECTED].ENV);
+  }
+
   @autobind
   @returns(String)
   getJson() {
@@ -85,11 +108,11 @@ export class Environment {
   constructor(
     options = new Configuration(),
     console = logger,
-    configurify = configurator,
-    loader = loading
+    loader = envLoader,
+    configurator = envConfigurator
   ) {
 
-    Object.assign(this, { loader, console, options, configurify });
+    Object.assign(this, { options, loader, console, configurator });
 
     Object.defineProperty(this, PROTECTED, {
       enumarable : false,
@@ -101,8 +124,7 @@ export class Environment {
 
     this[PROTECTED].ENV = this.load();
 
-    let warn = (this.options.silent !== true) ? this.console.warn.bind(this.console) : function() {};
-    this.config = this.configurify(undefined, undefined, warn);
+    this.config = this.configurator(undefined, undefined, this.console.warn);
   }
 }
 

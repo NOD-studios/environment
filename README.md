@@ -19,27 +19,25 @@ npm install --save @nod/environment
 ```
 
 ## Examples:
-```javascript
-import { environment } from '@nod/environment/instance';
-console.log(environment.config);
-```
 
 ```javascript
 import { Environment } from '@nod/environment';
-import path from 'path';
-let environment = new Environment({
-  root : path.resolve('.')
-});
 
-let config = environment.config;
-const ENV = environment.ENV;
+let environment = new Environment();
+
+let { ENV, config } = environment;
+
+//config is also environment variables but converted into object notation
+console.log({ config, ENV });
 ```
 
-## Options:
+## Configuring
 ```javascript
-let environment = new Environment({ // this will auto merge options
-  root, // root path for .env files
-  files       : [ // files to look in the path
+import { Environment, Configuration as EnvConfig } from '@nod/environment';
+import path from 'path';
+let environment = new Environment(new EnvConfig {
+  root : path.resolve('.'), // root path for .env files
+  files : [ // files to look in the path    
     '.env.local',
     '.env.production',
     '.env.test',
@@ -47,11 +45,7 @@ let environment = new Environment({ // this will auto merge options
     '.env',
     '.env.nod'
   ],
-  configurator, // configuration parser and merger
-  loader,  // dotenv loader
-  debug, // function to debug
-  info, // function to log info
-  warn // function to log warns
+  console // for outputting flow info
 });
 ```
 
