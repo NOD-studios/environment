@@ -77,7 +77,7 @@ All methods have strict type checking please check source code.
 [![Send e-mail][mail-image]][mail-url]
 [![Join the chat][gitter-image]][gitter-url]
 
-[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://nod.st)
+[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://nod.st) [![Greenkeeper badge](https://badges.greenkeeper.io/NOD-studios/environment.svg)](https://greenkeeper.io/)
 by [NOD studios](http://nod.st)
 
 
